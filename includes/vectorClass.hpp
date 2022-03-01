@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vectorClass.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/01 13:23:12 by cmarien          ###   ########.fr       */
+/*   Updated: 2022/03/01 18:48:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,30 +36,26 @@ namespace ft
 	private:
 		allocator_type	_allocator;
 		size_type		_cap;
+		size_type		_size;
 		pointer 		start;
-		pointer 		finish;
-		pointer 		end_storage;
 	public:
-		iterator begin(void)
-		{
-			return (start);
+		iterator begin(void){
+			return (&start[0]);
 		}
 
-		iterator end(void)
-		{
-			if (_cap == 1)
-				return (start);
-			return (finish);
+		iterator end(void){
+			return (&start[_cap]);
 		}
 
-		pointer& setup_finish(pointer &ptr)
-		{
-			return ptr;
+		reference front(void){
+			return start[0];
 		}
 
-		explicit vector() : start(), finish(), end_storage(){
-			finish = start;
-			_cap =  0;
+		reference back(void){
+			return start[_cap - 1];
+		}
+
+		explicit vector() : _cap(0), _size(0), start(){
 		}
 
 		vector(const vector& newvector){
@@ -68,12 +64,24 @@ namespace ft
 		~vector(){
 		}
 
-		void	push_back(value_type x){
-			if (!start)
-				start = &x;
-			else
-				finish = &x;
-			_cap++;
+		void reserve(size_type n)
+		{
+			if (n > _size)
+			{
+				size_type i = -1;
+				pointer tmp;
+				tmp = _allocator.allocate(n);
+				_size = n;
+				while (++i < _cap)
+					tmp[i] = start[i];
+				_allocator.deallocate(start, _cap);
+				start = tmp;
+			}
+		}
+
+		void	push_back(const value_type &x){
+			reserve(_cap + 1);
+			start[_cap++] = x;
 		}
 	};
 }

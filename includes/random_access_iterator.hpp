@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   random_access_iterator.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 10:34:19 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/01 12:44:33 by cmarien          ###   ########.fr       */
+/*   Updated: 2022/03/01 18:48:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ namespace ft
 			Iterator current;
 		public:
 			typedef iterator_traits<Iterator> traits_type;
-	//		typedef Iterator									iterator_type;
+			typedef Iterator									iterator_type;
 			typedef typename traits_type::value_type			value_type;
 			typedef typename traits_type::difference_type		difference_type;
 			typedef typename traits_type::reference			reference;
@@ -50,6 +50,20 @@ namespace ft
 
 		random_access_iterator operator++(){
 			return ++current;
+		}
+
+		random_access_iterator operator++(int){
+			Iterator tmp = current++;
+			return tmp;
+		}
+
+		random_access_iterator operator--(){
+			return --current;
+		}
+
+		random_access_iterator operator--(int){
+			Iterator tmp = current--;
+			return tmp;
 		}
 	};
 }
