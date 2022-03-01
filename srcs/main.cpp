@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:43:27 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/01 18:48:16 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/01 19:22:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,11 @@ int	main(void)
 	std::cout << "newBegin: " << *it << std::endl;
 	it++;
 	std::cout << "newBegin+1: " << *it << std::endl;
+
+	std::vector<std::string> vec;
+	vec.push_back("ABC");
+	vec.push_back("DEF");
+	std::vector<std::string>::reverse_iterator rit = vec.rend();
+	std::cout << *--rit << std::endl;
 	return (0);
 } 

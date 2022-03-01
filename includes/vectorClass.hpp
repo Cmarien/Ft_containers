@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/01 18:48:30 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/01 19:25:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ namespace ft
 		typedef const value_type									*const_pointer;
 		typedef ft::random_access_iterator<pointer, vector>			iterator;
 		typedef ft::random_access_iterator<const_pointer, vector>	const_iterator;
+		typedef ft::random_access_iterator<pointer, vector>			reverse_iterator;
+		typedef ft::random_access_iterator<const_pointer, vector>	const_reverse_iterator;
 		typedef std::size_t											size_type;
 	private:
 		allocator_type	_allocator;
@@ -45,6 +47,30 @@ namespace ft
 
 		iterator end(void){
 			return (&start[_cap]);
+		}
+
+		const_iterator cbegin(void){
+			return (&start[0]);
+		}
+
+		const_iterator	cend(void){
+			return (&start[_cap]);
+		}
+
+		reverse_iterator	rbegin(void){
+			return (&start[_cap - 1]);
+		}
+
+		reverse_iterator	rend(void){
+			return (&start[-1]);
+		}
+
+		const_reverse_iterator	crbegin(void){
+			return (&start[_cap - 1]);
+		}
+
+		const_reverse_iterator	crend(void){
+			return (&start[-1]);
 		}
 
 		reference front(void){
