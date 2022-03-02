@@ -6,7 +6,7 @@
 /*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 10:46:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/02/23 14:59:04 by cmarien          ###   ########.fr       */
+/*   Updated: 2022/03/02 11:20:19 by cmarien          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ struct iterator_traits {
   typedef typename _Iterator::reference reference;
 };
 
-/// Partial specialization for pointer types.
+
 template <typename _Tp>
 struct iterator_traits<_Tp*> {
   typedef std::random_access_iterator_tag iterator_category;
@@ -35,7 +35,7 @@ struct iterator_traits<_Tp*> {
   typedef _Tp& reference;
 };
 
-/// Partial specialization for const pointer types.
+
 template <typename _Tp>
 struct iterator_traits<const _Tp*> {
   typedef std::random_access_iterator_tag iterator_category;
