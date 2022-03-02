@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   random_access_iterator.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 10:34:19 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/02 10:55:59 by cmarien          ###   ########.fr       */
+/*   Updated: 2022/03/02 17:05:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ namespace ft
 		random_access_iterator(const Iterator& x) : current(x)
 		{ }
 
+		bool operator!=(const random_access_iterator& it) const {return (it.current != current);};
+
 		reference operator*(){
 			return *current;
 		}
@@ -64,6 +66,16 @@ namespace ft
 		random_access_iterator operator--(int){
 			Iterator tmp = current--;
 			return tmp;
+		}
+
+		difference_type operator-(random_access_iterator &sub){
+			difference_type i = 0;
+			while(*this != sub)
+			{
+				i++;
+				current--;
+			}
+			return i;
 		}
 	};
 }

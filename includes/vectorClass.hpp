@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vectorClass.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/02 12:10:53 by cmarien          ###   ########.fr       */
+/*   Updated: 2022/03/02 17:08:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@
 #include <memory>
 #include "random_access_iterator.hpp"
 #include "rev_random_access_iterator.hpp"
-#include "input_iterator.hpp"
+//#include "input_iterator.hpp"
+#include "enable_if.hpp"
 
 namespace ft
 {
@@ -94,16 +95,18 @@ namespace ft
 				start[i] = val;
 			}
 		}
-		
+
 		template <class InputIterator>
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), true) : _allocator(alloc){
+        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+			typename ft::enable_if<ft::is_integral<InputIterator>::value>::type* = 0)
+			: _allocator(alloc), _size(0){
 			differerence_type i = last - first;
 			_cap = i;
 			start = _allocator.allocate(_cap);
-			_size = _cap;
 			for (differerence_type j = 0; j < i; j++){
 				start[j] = *first;
 				first++;
+				_size++;
 			} 
 		}
 
