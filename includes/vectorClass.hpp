@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/02 17:08:58 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/04 18:47:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,11 @@
 #include <memory>
 #include "random_access_iterator.hpp"
 #include "rev_random_access_iterator.hpp"
-//#include "input_iterator.hpp"
 #include "enable_if.hpp"
+#include "pair.hpp"
+#include "equal.hpp"
+#include <math.h>
+#include <limits>
 
 namespace ft
 {
@@ -85,14 +88,14 @@ namespace ft
 			return start[_cap - 1];
 		}
 
-		explicit vector(const allocator_type& alloc = allocator_type()) : _allocator(alloc), _cap(0), _size(0), start(){
+		explicit vector(const allocator_type& alloc = allocator_type()) : _allocator(alloc), _cap(0), _size(0), start(0){
 			start = _allocator.allocate(_cap);
 		}
 
 		explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _allocator(alloc), _cap(n), _size(n){
 			start = _allocator.allocate(_cap);
 			for (size_type i = 0; i < n; i++){
-				start[i] = val;
+				_allocator.construct(&start[i], val);
 			}
 		}
 
@@ -104,7 +107,7 @@ namespace ft
 			_cap = i;
 			start = _allocator.allocate(_cap);
 			for (differerence_type j = 0; j < i; j++){
-				start[j] = *first;
+				_allocator.construct(&start[j], *first);
 				first++;
 				_size++;
 			} 
@@ -120,8 +123,23 @@ namespace ft
 			}
 		}
 		~vector(){
+			_allocator.deallocate(start, _cap);
 		}
 
+		vector&	operator=(const vector& x){
+			_allocator.deallocate(start, _cap);
+			_cap = 0;
+			_size = 0;
+			while (_cap < x._cap)
+			{
+				reserve(_cap + 1);
+				_allocator.construct(&start[_cap], x.start[_cap]);
+				_cap++;
+				_size++;
+			}
+			return *this;
+		}
+		
 		void reserve(size_type n)
 		{
 			if (n > _size)
@@ -131,15 +149,25 @@ namespace ft
 				tmp = _allocator.allocate(n);
 				_size = n;
 				while (++i < _cap)
-					tmp[i] = start[i];
+					_allocator.construct(&tmp[i], start[i]);
 				_allocator.deallocate(start, _cap);
 				start = tmp;
 			}
 		}
 
+		size_type	size() const {
+			return _size;
+		}
+
+		size_type	max_size() const{
+			if (sizeof(value_type) == 1)
+				return static_cast<size_t>(powf(2, 64)) - 1;
+			return ((static_cast<size_t>(powf(2, 64) / sizeof(value_type))) -1);
+		}
+
 		void	push_back(const value_type &x){
-			reserve(_cap + 1);
-			start[_cap++] = x;
+				reserve(_cap + 1);
+				_allocator.construct(&start[_cap++], x);
 		}
 	};
 }

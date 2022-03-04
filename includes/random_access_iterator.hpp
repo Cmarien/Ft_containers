@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 10:34:19 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/02 17:05:34 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/04 17:00:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ namespace ft
 		random_access_iterator(const Iterator& x) : current(x)
 		{ }
 
+		random_access_iterator base(){
+			return current;
+		}
+		
 		bool operator!=(const random_access_iterator& it) const {return (it.current != current);};
 
 		reference operator*(){
