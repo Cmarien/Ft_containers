@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:43:27 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/04 18:47:07 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/08 12:41:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(void)
 	std::cout << "Begin: " << *it << std::endl;
 	x.push_back("DEF");
 	x.push_back("GHI");
+	std::cout << "[1]" << x.at(1) << std::endl;
 	std::cout << "front :" << x.front() << std::endl;
 	std::cout << "back :" << x.back() << std::endl;
 	x.front() = "JKL";
@@ -55,9 +56,7 @@ int	main(void)
 	std::cout << "end: " << *--y.end() << std::endl;
 	std::cout << "begin: " << *y.begin() << std::endl;
 	std::cout << *x.begin() << std::endl;
-	ft::vector<std::string>::const_iterator cit = x.cbegin();
 	ft::vector<std::string>::iterator vit = y.begin();
-	*vit = *cit;
 	std::cout << *vit << std::endl;
 	std::cout << x.max_size() << std::endl;
 	std::vector<std::string> oh;
@@ -66,6 +65,13 @@ int	main(void)
 	std::cout << ahouais.max_size() << std::endl;
 	std::vector<char> ah;
 	std::cout << ah.max_size() << std::endl;
+	std::cout << "insert" <<  *x.insert(x.begin(), 5, "OUI") << std::endl;
+	std::cout << *x.begin() << std::endl;
+	std::cout << *++x.begin() << std::endl;
+	std::cout << x[3] << std::endl;
+	std::cout << "insert" <<  *x.insert(&x[2], "non") << std::endl;
+	std::cout << x[2] << std::endl;
+
 
 
 
@@ -81,6 +87,9 @@ int	main(void)
 	// std::cout << *vit.base() << std::endl;
 
 	ft::vector<int> full(7, 15);
+	std::vector<int> testfull(7, 15);
+	ft::vector<int>emptyone;
+	std::vector<int>emptytwo;
 	ft::vector<int>::iterator input = full.begin();
 	ft::vector<int>::iterator output = full.end();
 	ft::vector<int> fullb(input, output);
@@ -98,12 +107,22 @@ int	main(void)
 	std::cout << "Output - input: ";
 	std::cout << output - input << std::endl;
 
+	std::cout << "full size: " << full.size() << " Capacity: " << full.capacity() << std::endl;
+	std::cout << full.front() << " " << full.back() << std::endl;
+	full.resize(25, 18);
+	std::cout << "full size: " << full.size()  << " Capacity: " << full.capacity() << std::endl;
+	std::cout << full.front() << " " << full.back() << std::endl;
+	std::cout << "empty ? " << full.empty() << std::endl;
 
-	// std::pair<int, int> abcdef;
-	// abcdef = std::make_pair(5.5, 'A');
-	// std::cout << abcdef.second << std::endl;
-	// std::pair<int, int> abcd(5.6, 'a');
-	// std::cout << abcd.first << std::endl;
+	// full.resize(0);
+	// std::cout << "full size: " << full.size()  << " Capacity: " << full.capacity() << std::endl;
+	// std::cout << full.front() << " " << full.back() << std::endl;
+	// std::cout << "empty ? " << full.empty() << std::endl;
+
+	ft::vector<int> to_assign;
+	to_assign.assign(16, 8);
+	std::cout << " ASSIGNED " << to_assign[15] << std::endl;
+	std::cout << to_assign.size() << " " << to_assign.capacity() << std::endl;
 
 	std::cout << "Pair conversion: ";
 	ft::pair<int, int> abc;

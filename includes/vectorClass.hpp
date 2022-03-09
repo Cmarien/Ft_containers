@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/04 18:47:07 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/08 12:42:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,48 +48,10 @@ namespace ft
 		size_type		_size;
 		pointer 		start;
 	public:
-		iterator begin(void){
-			return (&start[0]);
-		}
 
-		iterator end(void){
-			return (&start[_cap]);
-		}
-
-		const_iterator cbegin(void){
-			return (&start[0]);
-		}
-
-		const_iterator	cend(void){
-			return (&start[_cap]);
-		}
-
-		reverse_iterator	rbegin(void){
-			return (&start[_cap - 1]);
-		}
-
-		reverse_iterator	rend(void){
-			return (&start[-1]);
-		}
-
-		const_reverse_iterator	crbegin(void){
-			return (&start[_cap - 1]);
-		}
-
-		const_reverse_iterator	crend(void){
-			return (&start[-1]);
-		}
-
-		reference front(void){
-			return start[0];
-		}
-
-		reference back(void){
-			return start[_cap - 1];
-		}
-
+		//constructors
 		explicit vector(const allocator_type& alloc = allocator_type()) : _allocator(alloc), _cap(0), _size(0), start(0){
-			start = _allocator.allocate(_cap);
+			// start = _allocator.allocate(_cap);
 		}
 
 		explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _allocator(alloc), _cap(n), _size(n){
@@ -122,39 +84,30 @@ namespace ft
 				this->start[i] = newvector.start[i];
 			}
 		}
+		////////////////////////////////////////////////////
+		//Destructor
 		~vector(){
 			_allocator.deallocate(start, _cap);
 		}
-
-		vector&	operator=(const vector& x){
-			_allocator.deallocate(start, _cap);
-			_cap = 0;
-			_size = 0;
-			while (_cap < x._cap)
-			{
-				reserve(_cap + 1);
-				_allocator.construct(&start[_cap], x.start[_cap]);
-				_cap++;
-				_size++;
-			}
-			return *this;
-		}
-		
-		void reserve(size_type n)
-		{
-			if (n > _size)
-			{
-				size_type i = -1;
-				pointer tmp;
-				tmp = _allocator.allocate(n);
-				_size = n;
-				while (++i < _cap)
-					_allocator.construct(&tmp[i], start[i]);
-				_allocator.deallocate(start, _cap);
-				start = tmp;
-			}
+		////////////////////////////////////////////////////
+		//Iterators functions
+		iterator begin(void){
+			return (&start[0]);
 		}
 
+		iterator end(void){
+			return (&start[_cap]);
+		}
+
+		reverse_iterator	rbegin(void){
+			return (&start[_cap - 1]);
+		}
+
+		reverse_iterator	rend(void){
+			return (&start[-1]);
+		}
+		///////////////////////////////////////////////////
+		//Capacity functions
 		size_type	size() const {
 			return _size;
 		}
@@ -164,11 +117,147 @@ namespace ft
 				return static_cast<size_t>(powf(2, 64)) - 1;
 			return ((static_cast<size_t>(powf(2, 64) / sizeof(value_type))) -1);
 		}
-
-		void	push_back(const value_type &x){
-				reserve(_cap + 1);
-				_allocator.construct(&start[_cap++], x);
+		
+		void	resize(size_type n, value_type val = value_type()){
+			while (n < _size)
+				pop_back();
+			while (n > _size)
+				push_back(val);
 		}
+		
+		size_type capacity(void){
+			return (_cap);
+		}
+
+		bool	empty(void){
+			return _size ? false : true;
+		}
+
+		void reserve(size_type n)
+		{
+			if (n > _cap)
+			{
+				size_type i = -1;
+				pointer tmp;
+				tmp = _allocator.allocate(n);
+				while (++i < _cap)
+					_allocator.construct(&tmp[i], start[i]);
+				if (_cap > 0)
+					_allocator.deallocate(start, _cap);
+				start = tmp;
+				_cap = n;
+			}
+		}
+		//////////////////////////////////////////////////////
+		//Element accessor functions
+		reference	front(void){
+			return start[0];
+		}
+
+		reference	back(void){
+			return start[_cap - 1];
+		}
+
+		reference	operator[](size_type n){
+			return start[n];
+		}
+
+		reference	at(size_type n){
+			//if (n >= _size)
+				//return exception;
+			return start[n];
+		}
+
+		///////////////////////////////////////////////////////
+		//Modifiers functions
+		void	push_back(const value_type &x){
+			reserve(_size + 1);
+			_allocator.construct(&start[_size++], x);
+		}
+
+		void	pop_back(void){
+			_allocator.destroy(&start[--_size]);
+		}
+
+		template<class InputIterator>
+		void	assign(InputIterator first, InputIterator last,
+		typename ft::enable_if<ft::is_integral<InputIterator>::value>::type* = 0){
+			size_type i = static_cast<size_type>(last - first);
+			clear();
+			if(i > _cap){
+				_allocator.deallocate(start, _cap);
+				_cap = i;
+				start = _allocator.allocate(_cap);
+			}
+			for (size_type j = 0; j < i; j++){
+				_allocator.construct(&start[j], *first);
+				first++;
+			}
+			_size = i;
+		}
+
+		void	assign(size_type n, const value_type &val){
+			clear();
+			if(n > _cap){
+				_allocator.deallocate(start, _cap);
+				_cap = n;
+				start = _allocator.allocate(_cap);
+			}
+			for (size_type j = 0; j < n; j++){
+				_allocator.construct(&start[j], val);
+			}
+			_size = n;
+		}
+
+		iterator insert(iterator position, const value_type &val){
+			return insert(position, 1, val);
+		}
+
+		iterator insert(iterator position, size_type n, const value_type &val){
+			iterator beg = begin();
+			size_type ret = static_cast<size_type>(position - beg);
+			iterator tmp(&start[ret]);
+
+			reserve(_size + n);
+			size_type index = _cap - 1;
+			//std::cout << "index = " << index << " n = " << n << " ret = " << ret << std::endl;
+			if (tmp != end()){
+				while (index - n >= ret && index > n){
+					_allocator.construct(&start[index], start[index - n]);
+					_allocator.destroy(&start[index - n]);
+					index--;
+				}
+			}
+			// std::cout << "index" << index << std::endl;
+			for (size_type i = 0; i < n; i++){
+				_allocator.construct(&start[index], val);
+				index--;
+				_size++;
+			}
+			return &start[index + 1];
+		}
+
+		void	clear(void){
+			while (_size > 0)
+				pop_back();
+		}
+		///////////////////////////////////////////////////////
+		//Overloads
+		vector&	operator=(const vector& x){
+			_allocator.deallocate(start, _cap);
+			_cap = 0;
+			_size = 0;
+			while (_cap < x._cap)
+			{
+				reserve(_cap + 1);
+				_allocator.construct(&start[_size], x.start[_size]);
+				_size++;
+			}
+			return *this;
+		}
+		//////////////////////////////////////////////////////////
+		//Private functions
+		private:
 	};
 }
 
