@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/08 12:42:02 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/10 16:46:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ namespace ft
 		}
 
 		iterator end(void){
-			return (&start[_cap]);
+			return (&start[_size]);
 		}
 
 		reverse_iterator	rbegin(void){
-			return (&start[_cap - 1]);
+			return (&start[_size - 1]);
 		}
 
 		reverse_iterator	rend(void){
@@ -210,10 +210,14 @@ namespace ft
 		}
 
 		iterator insert(iterator position, const value_type &val){
-			return insert(position, 1, val);
+			iterator beg = begin();
+			iterator tmp = position;
+			differerence_type x = tmp - beg;
+			insert(position, 1, val);
+			return &start[x];
 		}
 
-		iterator insert(iterator position, size_type n, const value_type &val){
+		void insert(iterator position, size_type n, const value_type &val){
 			iterator beg = begin();
 			size_type ret = static_cast<size_type>(position - beg);
 			iterator tmp(&start[ret]);
@@ -222,24 +226,63 @@ namespace ft
 			size_type index = _cap - 1;
 			//std::cout << "index = " << index << " n = " << n << " ret = " << ret << std::endl;
 			if (tmp != end()){
-				while (index - n >= ret && index > n){
+				while (index - n >= ret && index >= n){
 					_allocator.construct(&start[index], start[index - n]);
 					_allocator.destroy(&start[index - n]);
 					index--;
 				}
 			}
-			// std::cout << "index" << index << std::endl;
 			for (size_type i = 0; i < n; i++){
 				_allocator.construct(&start[index], val);
 				index--;
 				_size++;
 			}
-			return &start[index + 1];
+		}
+		template<class InputIterator>
+		void	insert(iterator position, InputIterator first, InputIterator last,
+		typename ft::enable_if<ft::is_integral<InputIterator>::value>::type* = 0){
+			iterator beg = begin();
+			iterator tmp_last = last;
+			size_type ret = static_cast<size_type>(position - beg);
+			size_type n = static_cast<size_type>(last - first) + 1;
+			iterator tmp(&start[ret]);
+
+			reserve(_size + n);
+			size_type index = _cap - 1;
+			//std::cout << "index = " << index << " n = " << n << " ret = " << ret << std::endl;
+			if (tmp != end()){
+				while (index - n >= ret && index >= n){
+					_allocator.construct(&start[index], start[index - n]);
+					_allocator.destroy(&start[index - n]);
+					index--;
+				}
+			}
+			for (size_type i = 0; i < n; i++){
+				_allocator.construct(&start[index], *tmp_last);
+				index--;
+				tmp_last--;
+				_size++;
+			}
 		}
 
 		void	clear(void){
 			while (_size > 0)
 				pop_back();
+		}
+
+		iterator	erase(iterator position){
+			iterator beg = begin();
+			size_type index = static_cast<size_type>(position - beg);
+			size_type ret = index;
+			while (&start[index] != &start[_size - 1]){
+				_allocator.destroy(&start[index]);
+				_allocator.construct(&start[index], start[index + 1]);
+				index++;
+			}
+			_allocator.destroy(&start[index]);
+			_size--;
+			return &start[ret];
+			//check for end
 		}
 		///////////////////////////////////////////////////////
 		//Overloads

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:43:27 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/08 12:41:19 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/10 16:24:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,29 @@ int	main(void)
 	std::cout << ahouais.max_size() << std::endl;
 	std::vector<char> ah;
 	std::cout << ah.max_size() << std::endl;
-	std::cout << "insert" <<  *x.insert(x.begin(), 5, "OUI") << std::endl;
-	std::cout << *x.begin() << std::endl;
+	x.insert(x.begin(), 5, "OUI");
+	std::cout << x[5] << std::endl;
 	std::cout << *++x.begin() << std::endl;
 	std::cout << x[3] << std::endl;
 	std::cout << "insert" <<  *x.insert(&x[2], "non") << std::endl;
 	std::cout << x[2] << std::endl;
-
+	x.insert(x.end(), y.begin(), --y.end());
+	for (size_t i = 0; i < x.size(); i++){
+		std::cout << x[i] << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "ERASE" << *x.erase(&x[1]) << std::endl;
+	for (size_t i = 0; i < x.size(); i++){
+		std::cout << x[i] << std::endl;
+	}
+	std::vector<std::string> era;
+	era.push_back("a");
+	era.push_back("b");
+	era.push_back("c");
+	era.push_back("d");
+	era.push_back("e");
+	era.push_back("f");
+	std::cout << "ERASE" << *era.erase(era.end()) << " SIZE" << era.size();
 
 
 
