@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:43:27 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/10 16:24:54 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:06:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,13 @@ int	main(void)
 		std::cout << x[i] << std::endl;
 	}
 	std::cout << std::endl;
-	std::cout << "ERASE" << *x.erase(&x[1]) << std::endl;
-	for (size_t i = 0; i < x.size(); i++){
-		std::cout << x[i] << std::endl;
+	for (size_t i = 0; i < y.size(); i++){
+		std::cout << y[i] << std::endl;
+	}
+	std::cout << std::endl;
+	std::cout << "ERASE" << *y.erase(&y[0], &y[3])  << " SIZE" << y.size() << std::endl;
+	for (size_t i = 0; i < y.size(); i++){
+		std::cout << y[i] << std::endl;
 	}
 	std::vector<std::string> era;
 	era.push_back("a");
@@ -87,9 +91,26 @@ int	main(void)
 	era.push_back("d");
 	era.push_back("e");
 	era.push_back("f");
-	std::cout << "ERASE" << *era.erase(era.end()) << " SIZE" << era.size();
-
-
+	std::cout << era.size() << std::endl;
+	std::cout << "ERASE" << *era.erase(era.begin(), era.end()) << " SIZE" << era.size();
+	std::cout << era[0] << std::endl;
+	std::cout << "Y" << std::endl;
+	for (size_t i = 0; i < y.size(); i++){
+		std::cout << y[i] << std::endl;
+	}
+	std::cout << "X" << std::endl;
+	for (size_t i = 0; i < x.size(); i++){
+		std::cout << x[i] << std::endl;
+	}
+	x.swap(y);
+	std::cout << "Y" << std::endl;
+	for (size_t i = 0; i < y.size(); i++){
+		std::cout << y[i] << std::endl;
+	}
+	std::cout << "X" << std::endl;
+	for (size_t i = 0; i < x.size(); i++){
+		std::cout << x[i] << std::endl;
+	}
 
 	// std::vector<std::string> aie;
 	// aie.push_back("NON");

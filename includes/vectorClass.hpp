@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/10 16:46:40 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/11 15:06:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,8 +272,13 @@ namespace ft
 
 		iterator	erase(iterator position){
 			iterator beg = begin();
+			iterator tmp = position;
 			size_type index = static_cast<size_type>(position - beg);
 			size_type ret = index;
+			if (tmp == &start[_size]){
+				_size--;
+				return &start[_size];
+			}
 			while (&start[index] != &start[_size - 1]){
 				_allocator.destroy(&start[index]);
 				_allocator.construct(&start[index], start[index + 1]);
@@ -282,7 +287,48 @@ namespace ft
 			_allocator.destroy(&start[index]);
 			_size--;
 			return &start[ret];
-			//check for end
+		}
+		template<class InputIterator>
+		iterator	erase(InputIterator first, InputIterator last){
+			if (first == &start[_size] || first == last){
+				return first;
+			}
+			size_type n = static_cast<size_type>(last - first);
+			iterator beg = begin();
+			iterator fi = first;
+			size_type index = static_cast<size_type>(fi - beg);
+			while (&start[index] != last){
+				_allocator.destroy(&start[index]);
+				if (&start[index + n] < &start[_size])
+					_allocator.construct(&start[index], start[index + n]);
+				index++;
+			}
+			_allocator.destroy(&start[index]);
+			size_type ret = index;
+			while (&start[index] != &start[_size]){
+				_allocator.destroy(&start[index]);
+				index++;
+			}
+			if (last == &start[_size])
+			{
+				_size -= n;
+				return &start[_size];
+			}
+			return &start[ret];
+		}
+
+		void	swap(vector &x){
+			swap(_allocator, x._allocator);
+			swap(_size, x._size);
+			swap(_cap, x._cap);
+			swap(start, x.start);
+		}
+
+		///////////////////////////////////////////////////////
+		//Allocator
+
+		allocator_type get_allocator() const{
+			return _allocator;
 		}
 		///////////////////////////////////////////////////////
 		//Overloads
@@ -300,6 +346,13 @@ namespace ft
 		}
 		//////////////////////////////////////////////////////////
 		//Private functions
+		private:
+		template<typename U>
+		void	swap(U &x, U &y){
+			U tmp = x;
+			x = y;
+			y = tmp;
+		}
 		private:
 	};
 }

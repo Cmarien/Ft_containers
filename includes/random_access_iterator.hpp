@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 10:34:19 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/04 17:00:48 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/11 13:59:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ namespace ft
 		}
 		
 		bool operator!=(const random_access_iterator& it) const {return (it.current != current);};
+		bool operator==(const random_access_iterator& it) const {return (it.current == current);};
 
 		reference operator*(){
 			return *current;
@@ -74,10 +75,11 @@ namespace ft
 
 		difference_type operator-(random_access_iterator &sub){
 			difference_type i = 0;
-			while(*this != sub)
+			Iterator tmp = current;
+			while(tmp != sub.current)
 			{
 				i++;
-				current--;
+				tmp--;
 			}
 			return i;
 		}
