@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:43:27 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/11 15:06:41 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/11 19:49:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	main(void)
 	for (size_t i = 0; i < x.size(); i++){
 		std::cout << x[i] << std::endl;
 	}
-	x.swap(y);
+	swap(x, y);
 	std::cout << "Y" << std::endl;
 	for (size_t i = 0; i < y.size(); i++){
 		std::cout << y[i] << std::endl;
@@ -111,7 +111,10 @@ int	main(void)
 	for (size_t i = 0; i < x.size(); i++){
 		std::cout << x[i] << std::endl;
 	}
-
+	ft::vector<std::string> cop = y;
+	std::cout << (y >= cop) << std::endl;
+	cop.push_back("op");
+	std::cout << (y >= cop) << std::endl;
 	// std::vector<std::string> aie;
 	// aie.push_back("NON");
 	// aie.push_back("OUI");
@@ -186,6 +189,16 @@ int	main(void)
 	std::cout << "(is equal)std My equal: " << std::equal(first_ints, first_ints+5, second_ints, comp_int) << std::endl;
 	std::cout << "(is not equal)std Default equal: " << std::equal(first_ints, first_ints+5, third_ints) << std::endl;
 	std::cout << "(is not equal)std My equal: " << std::equal(first_ints, first_ints+5, third_ints, comp_int) << std::endl;
+	
+	std::vector<int> cons;
+	cons.push_back(5);
+	std::vector<int>::const_iterator coit = cons.begin();
+	std::cout << coit[0] << std::endl;
+	ft::vector<int>fcons;
+	fcons.push_back(6);
+//	ft::vector<int>::iterator coiit = fcons.begin();
+	ft::vector<int>::const_iterator fcoit = fcons.begin();
+	std::cout << fcoit[0] << std::endl;
 	// std::vector<int> fulla(7, 15);
 	// std::vector<int>::iterator fir = fulla.begin();
 	// std::vector<int>::iterator las = fulla.end();

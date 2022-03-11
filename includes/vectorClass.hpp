@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/11 15:06:30 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/11 19:34:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ namespace ft
 		typedef const value_type										&const_reference;
 		typedef value_type												*pointer;
 		typedef const value_type										*const_pointer;
-		typedef ft::random_access_iterator<pointer, vector>				iterator;
-		typedef ft::random_access_iterator<const_pointer, vector>		const_iterator;
-		typedef ft::rev_random_access_iterator<pointer, vector>			reverse_iterator;
-		typedef ft::rev_random_access_iterator<const_pointer, vector>	const_reverse_iterator;
+		typedef ft::random_access_iterator<T>				iterator;
+		typedef ft::random_access_iterator<T>		const_iterator;
+		typedef ft::rev_random_access_iterator<T>			reverse_iterator;
+		typedef ft::rev_random_access_iterator<T>	const_reverse_iterator;
 		typedef std::size_t												size_type;
 		typedef	ptrdiff_t												differerence_type;
 	private:
@@ -91,20 +91,36 @@ namespace ft
 		}
 		////////////////////////////////////////////////////
 		//Iterators functions
-		iterator begin(void){
-			return (&start[0]);
+		iterator begin(){
+			return (iterator(start));
 		}
 
+		const_iterator begin() const{
+			return (const_iterator(start));
+		}
+		
 		iterator end(void){
-			return (&start[_size]);
+			return (iterator(&start[_size]));
+		}
+
+		const_iterator end(void) const{
+			return (const_iterator(&start[_size]));
 		}
 
 		reverse_iterator	rbegin(void){
-			return (&start[_size - 1]);
+			return (reverse_iterator(&start[_size - 1]));
+		}
+
+		const_reverse_iterator	rbegin(void) const{
+			return (const_reverse_iterator(&start[_size - 1]));
 		}
 
 		reverse_iterator	rend(void){
-			return (&start[-1]);
+			return (reverse_iterator(&start[-1]));
+		}
+
+		const_reverse_iterator	rend(void) const{
+			return (const_reverse_iterator(&start[-1]));
 		}
 		///////////////////////////////////////////////////
 		//Capacity functions
@@ -344,6 +360,48 @@ namespace ft
 			}
 			return *this;
 		}
+		friend void swap(vector &x, vector&y){
+			x.swap(y);
+		}
+
+		friend bool operator==(const vector& lhs, const vector& rhs){
+			if (lhs.size() != rhs.size())
+				return false;
+			vector tmpl = lhs;
+			vector tmpr = rhs;
+			return ft::equal(tmpl.begin(), tmpl.end(), tmpr.begin());
+		}
+
+		friend bool operator!=(const vector& lhs, const vector& rhs){
+			if (lhs.size() != rhs.size())
+				return true;
+			vector tmpl = lhs;
+			vector tmpr = rhs;
+			return !(ft::equal(tmpl.begin(), tmpl.end(), tmpr.begin()));
+		}
+
+		friend bool operator<(const vector& lhs, const vector& rhs){
+			vector tmpl = lhs;
+			vector tmpr = rhs;
+			if (lhs.size() < rhs.size()){
+				return ft::lexicographical_compare(tmpl.begin(), tmpl.end(), tmpr.begin(), tmpr.end());	
+			}
+			iterator tmp = &tmpl[rhs.size()];
+			return ft::lexicographical_compare(tmpl.begin(), tmp, tmpr.begin(), tmpr.end());
+		}
+
+		friend bool operator<=(const vector& lhs, const vector& rhs){
+			return !(rhs < lhs);
+		}
+
+		friend bool operator>(const vector& lhs, const vector& rhs){
+			return (rhs < lhs);
+		}
+		
+		friend bool operator>=(const vector& lhs, const vector& rhs){
+			return !(lhs < rhs);
+		}
+
 		//////////////////////////////////////////////////////////
 		//Private functions
 		private:
@@ -353,7 +411,6 @@ namespace ft
 			x = y;
 			y = tmp;
 		}
-		private:
 	};
 }
 

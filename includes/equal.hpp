@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 14:22:04 by user42            #+#    #+#             */
-/*   Updated: 2022/03/04 14:57:46 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/11 16:13:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ namespace ft{
 			++first1;
 			++first2;
 		}
-		return (*first2 != *last2);
+		return (first2 != last2);
 	}
 
 	template<class InputIterator1, class InputIterator2, class Compare>

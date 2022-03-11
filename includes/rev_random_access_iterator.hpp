@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rev_random_access_iterator.hpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 10:59:08 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/02 11:06:58 by cmarien          ###   ########.fr       */
+/*   Updated: 2022/03/11 19:58:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,43 @@
 #include "random_access_iterator.hpp"
 
 namespace ft{
-	template<typename Iterator, typename Container>
-	class rev_random_access_iterator
+	template<typename T>
+	class rev_random_access_iterator : ft::iterator<ft::random_access_iterator_tag, T>
 	{
 	private:
-	protected:
-		Iterator current;
 	public:
-		typedef iterator_traits<Iterator> traits_type;
-		typedef Iterator									iterator_type;
-		typedef typename traits_type::value_type			value_type;
-		typedef typename traits_type::difference_type		difference_type;
-		typedef typename traits_type::reference			reference;
-		typedef typename traits_type::pointer				pointer;
-		typedef typename traits_type::iterator_category	iterator_category;
-
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type			value_type;
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type		difference_type;
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::pointer				pointer;
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::iterator_category	iterator_category;
+	protected:
+		pointer current;
+	public:
 		
-		rev_random_access_iterator() : current(Iterator()) { };
-		rev_random_access_iterator(const Iterator& x) : current(x) { };
+		rev_random_access_iterator() : current(pointer()) {}
 
-		reference operator*(){
+		rev_random_access_iterator(pointer p) : current(p) {
+		}
+
+		rev_random_access_iterator(const rev_random_access_iterator& x) : current(x.current)
+		{ }
+
+		bool operator!=(const rev_random_access_iterator& it) const {return (it.current != current);};
+		bool operator==(const rev_random_access_iterator& it) const {return (it.current == current);};
+
+		reference operator*() const{
 			return *current;
 		}
 
-		pointer	operator->(){
+		pointer	operator->() const{
 			return current;
+		}
+
+		rev_random_access_iterator	&operator=(const rev_random_access_iterator &rhs) {
+			if (this != &rhs)
+				current = rhs.current;
+			return *this;
 		}
 
 		rev_random_access_iterator operator++(){
@@ -48,7 +60,7 @@ namespace ft{
 		}
 
 		rev_random_access_iterator operator++(int){
-			Iterator tmp = current--;
+			pointer tmp = current--;
 			return tmp;
 		}
 
@@ -57,8 +69,53 @@ namespace ft{
 		}
 
 		rev_random_access_iterator operator--(int){
-			Iterator tmp = current++;
+			pointer tmp = current++;
 			return tmp;
+		}
+
+		difference_type operator-(rev_random_access_iterator &sub){
+			difference_type i = 0;
+			pointer tmp = current;
+			while(tmp != sub.current)
+			{
+				i++;
+				tmp--;
+			}
+			return i;
+		}
+
+		rev_random_access_iterator	operator-(difference_type n){
+			pointer tmp = current;
+			for (difference_type i = 0; i < n; i++){
+				tmp++;
+			}
+			return tmp;
+		}
+
+		rev_random_access_iterator	operator+(difference_type n){
+			pointer tmp = current;
+			for (difference_type i = 0; i < n; i++){
+				tmp--;
+			}
+			return tmp;
+		}
+
+		rev_random_access_iterator	operator+=(difference_type n){
+			for (difference_type i = 0; i < n; i++){
+				current--;
+			}
+			return current;
+		}
+
+		rev_random_access_iterator	operator-=(difference_type n){
+			for (difference_type i = 0; i < n; i++){
+				current++;
+			}
+			return current;
+		}
+
+		reference	operator[](int n){
+			return current[n];
 		}
 	};
 }
