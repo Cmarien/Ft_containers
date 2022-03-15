@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:43:27 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/11 19:49:59 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/15 13:29:43 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int	main(void)
 	std::cout << "insert" <<  *x.insert(&x[2], "non") << std::endl;
 	std::cout << x[2] << std::endl;
 	x.insert(x.end(), y.begin(), --y.end());
+	std::cout << std::endl;
 	for (size_t i = 0; i < x.size(); i++){
 		std::cout << x[i] << std::endl;
 	}
@@ -80,9 +81,12 @@ int	main(void)
 		std::cout << y[i] << std::endl;
 	}
 	std::cout << std::endl;
-	std::cout << "ERASE" << *y.erase(&y[0], &y[3])  << " SIZE" << y.size() << std::endl;
-	for (size_t i = 0; i < y.size(); i++){
-		std::cout << y[i] << std::endl;
+	ft::vector<std::string>::iterator erit;
+	std::cout << "ERASE" << " SIZE" << x.size() << std::endl;
+	x[1] = "first";
+	erit = x.erase(x.begin(), x.begin() + 1);
+	for (size_t i = 0; i < x.size(); i++){
+		std::cout << *erit++ << std::endl;
 	}
 	std::vector<std::string> era;
 	era.push_back("a");
@@ -111,10 +115,20 @@ int	main(void)
 	for (size_t i = 0; i < x.size(); i++){
 		std::cout << x[i] << std::endl;
 	}
+	std::cout << std::endl;
 	ft::vector<std::string> cop = y;
 	std::cout << (y >= cop) << std::endl;
 	cop.push_back("op");
 	std::cout << (y >= cop) << std::endl;
+
+	ft::vector<std::string> toins;
+	toins.push_back("1");
+	ft::vector<std::string> tmp = toins;
+	toins.insert(toins.begin(), tmp.begin(), tmp.end());
+	std::cout << "SIZE" << toins.size() << std::endl;
+	std::cout << *++toins.begin() << std::endl;
+
+
 	// std::vector<std::string> aie;
 	// aie.push_back("NON");
 	// aie.push_back("OUI");
@@ -192,10 +206,14 @@ int	main(void)
 	
 	std::vector<int> cons;
 	cons.push_back(5);
+	const std::vector<int> copco(cons);
+	std::cout << copco[0] << std::endl;
 	std::vector<int>::const_iterator coit = cons.begin();
 	std::cout << coit[0] << std::endl;
 	ft::vector<int>fcons;
 	fcons.push_back(6);
+	const ft::vector<int> copfco(fcons);
+	std::cout << copfco[0] << std::endl;
 //	ft::vector<int>::iterator coiit = fcons.begin();
 	ft::vector<int>::const_iterator fcoit = fcons.begin();
 	std::cout << fcoit[0] << std::endl;

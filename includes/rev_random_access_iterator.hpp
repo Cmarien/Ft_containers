@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 10:59:08 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/11 19:58:19 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/14 17:19:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ namespace ft{
 
 		bool operator!=(const rev_random_access_iterator& it) const {return (it.current != current);};
 		bool operator==(const rev_random_access_iterator& it) const {return (it.current == current);};
+		bool operator>(const rev_random_access_iterator& it) const {return (it.current > current);};
+		bool operator<(const rev_random_access_iterator& it) const {return (it.current < current);};
+		bool operator<=(const rev_random_access_iterator& it) const {return (it.current <= current);};
+		bool operator>=(const rev_random_access_iterator& it) const {return (it.current >= current);};
 
 		reference operator*() const{
 			return *current;
@@ -115,7 +119,7 @@ namespace ft{
 		}
 
 		reference	operator[](int n){
-			return current[n];
+			return *(current - n);
 		}
 	};
 }

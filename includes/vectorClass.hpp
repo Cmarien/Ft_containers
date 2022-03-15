@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:45:02 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/11 19:34:12 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/15 13:30:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,16 @@ namespace ft
 			this->_cap = newvector._cap;
 			this->_size = newvector._size;
 			this->start = this->_allocator.allocate(_cap);
-			for (size_type i = 0; i < _cap; i++){
-				this->start[i] = newvector.start[i];
+			for (size_type i = 0; i < _size; i++){
+				_allocator.construct(&start[i], newvector.start[i]);
 			}
 		}
 		////////////////////////////////////////////////////
 		//Destructor
 		~vector(){
+			for (size_type i = 0; i < _size; i++){
+				_allocator.destroy(&start[i]);
+			}
 			_allocator.deallocate(start, _cap);
 		}
 		////////////////////////////////////////////////////
@@ -145,7 +148,7 @@ namespace ft
 			return (_cap);
 		}
 
-		bool	empty(void){
+		bool	empty(void) const{
 			return _size ? false : true;
 		}
 
@@ -158,19 +161,21 @@ namespace ft
 				tmp = _allocator.allocate(n);
 				while (++i < _cap)
 					_allocator.construct(&tmp[i], start[i]);
-				if (_cap > 0)
-					_allocator.deallocate(start, _cap);
+				for(size_type index = 0; index < _size; index++){
+					_allocator.destroy(&start[index]);
+				}
+				_allocator.deallocate(start, _cap);
 				start = tmp;
 				_cap = n;
 			}
 		}
 		//////////////////////////////////////////////////////
 		//Element accessor functions
-		reference	front(void){
+		reference	front(void)const{
 			return start[0];
 		}
 
-		reference	back(void){
+		reference	back(void)const{
 			return start[_cap - 1];
 		}
 
@@ -178,9 +183,13 @@ namespace ft
 			return start[n];
 		}
 
-		reference	at(size_type n){
-			//if (n >= _size)
-				//return exception;
+		const_reference	operator[](size_type n) const{
+			return start[n];
+		}
+
+		reference	at(size_type n)const{
+			if (n >= _size)
+				throw vector::OutOfRangeException();
 			return start[n];
 		}
 
@@ -201,6 +210,9 @@ namespace ft
 			size_type i = static_cast<size_type>(last - first);
 			clear();
 			if(i > _cap){
+				for (size_type index = 0; index < _size; index++){
+					_allocator.destroy(&start[index]);
+				}
 				_allocator.deallocate(start, _cap);
 				_cap = i;
 				start = _allocator.allocate(_cap);
@@ -215,6 +227,9 @@ namespace ft
 		void	assign(size_type n, const value_type &val){
 			clear();
 			if(n > _cap){
+				for (size_type i = 0; i < _size; i++){
+					_allocator.destroy(&start[i]);
+				}
 				_allocator.deallocate(start, _cap);
 				_cap = n;
 				start = _allocator.allocate(_cap);
@@ -260,12 +275,11 @@ namespace ft
 			iterator beg = begin();
 			iterator tmp_last = last;
 			size_type ret = static_cast<size_type>(position - beg);
-			size_type n = static_cast<size_type>(last - first) + 1;
+			size_type n = static_cast<size_type>(last - first);
 			iterator tmp(&start[ret]);
 
 			reserve(_size + n);
 			size_type index = _cap - 1;
-			//std::cout << "index = " << index << " n = " << n << " ret = " << ret << std::endl;
 			if (tmp != end()){
 				while (index - n >= ret && index >= n){
 					_allocator.construct(&start[index], start[index - n]);
@@ -274,7 +288,7 @@ namespace ft
 				}
 			}
 			for (size_type i = 0; i < n; i++){
-				_allocator.construct(&start[index], *tmp_last);
+				_allocator.construct(&start[index], *(tmp_last - 1));
 				index--;
 				tmp_last--;
 				_size++;
@@ -304,33 +318,35 @@ namespace ft
 			_size--;
 			return &start[ret];
 		}
+		
 		template<class InputIterator>
 		iterator	erase(InputIterator first, InputIterator last){
 			if (first == &start[_size] || first == last){
 				return first;
 			}
 			size_type n = static_cast<size_type>(last - first);
-			iterator beg = begin();
-			iterator fi = first;
-			size_type index = static_cast<size_type>(fi - beg);
-			while (&start[index] != last){
-				_allocator.destroy(&start[index]);
-				if (&start[index + n] < &start[_size])
-					_allocator.construct(&start[index], start[index + n]);
-				index++;
+			iterator ret = first;
+			while (&(*(first + n)) < &start[_size]){
+				_allocator.destroy(&(*first));
+				if (&(*(first + n)) < &start[_size] && last != &start[_size])
+					_allocator.construct(&(*first), *(first + n));
+				first++;
 			}
-			_allocator.destroy(&start[index]);
-			size_type ret = index;
-			while (&start[index] != &start[_size]){
-				_allocator.destroy(&start[index]);
-				index++;
+			// if (last != &start[_size]){
+			// 	_allocator.destroy(&(*first));
+			// 	first++;
+			// }
+			while (&(*first) != &start[_size]){
+				_allocator.destroy(&(*first));
+				first++;
 			}
 			if (last == &start[_size])
 			{
 				_size -= n;
 				return &start[_size];
 			}
-			return &start[ret];
+			_size -= n;
+			return ret;
 		}
 
 		void	swap(vector &x){
@@ -349,6 +365,9 @@ namespace ft
 		///////////////////////////////////////////////////////
 		//Overloads
 		vector&	operator=(const vector& x){
+			for (size_type i = 0; i < _size; i++){
+				_allocator.destroy(&start[i]);
+			}
 			_allocator.deallocate(start, _cap);
 			_cap = 0;
 			_size = 0;
@@ -381,13 +400,10 @@ namespace ft
 		}
 
 		friend bool operator<(const vector& lhs, const vector& rhs){
-			vector tmpl = lhs;
-			vector tmpr = rhs;
 			if (lhs.size() < rhs.size()){
-				return ft::lexicographical_compare(tmpl.begin(), tmpl.end(), tmpr.begin(), tmpr.end());	
+				return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());	
 			}
-			iterator tmp = &tmpl[rhs.size()];
-			return ft::lexicographical_compare(tmpl.begin(), tmp, tmpr.begin(), tmpr.end());
+			return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 		}
 
 		friend bool operator<=(const vector& lhs, const vector& rhs){
@@ -403,7 +419,7 @@ namespace ft
 		}
 
 		//////////////////////////////////////////////////////////
-		//Private functions
+		//Private function
 		private:
 		template<typename U>
 		void	swap(U &x, U &y){
@@ -411,6 +427,13 @@ namespace ft
 			x = y;
 			y = tmp;
 		}
+		class OutOfRangeException : public std::exception
+		{
+		public:
+	 	   char const* what() const throw(){
+				return "Out Of Range error: vector::_M_range_check";
+			}
+		};
 	};
 }
 
