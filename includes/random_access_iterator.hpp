@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   random_access_iterator.hpp                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 10:34:19 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/14 14:57:22 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/23 10:45:49 by cmarien          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ namespace ft
 			return current;
 		}
 		
-		bool operator!=(const random_access_iterator& it) const {return (it.current != current);};
-		bool operator==(const random_access_iterator& it) const {return (it.current == current);};
-		bool operator>(const random_access_iterator& it) const {return (it.current > current);};
-		bool operator<(const random_access_iterator& it) const {return (it.current < current);};
-		bool operator<=(const random_access_iterator& it) const {return (it.current <= current);};
-		bool operator>=(const random_access_iterator& it) const {return (it.current >= current);};
+		bool operator!=(const random_access_iterator& it) const {return (current != it.current);};
+		bool operator==(const random_access_iterator& it) const {return (current == it.current);};
+		bool operator>(const random_access_iterator& it) const {return (current > it.current);};
+		bool operator<(const random_access_iterator& it) const {return (current < it.current);};
+		bool operator<=(const random_access_iterator& it) const {return (current <= it.current);};
+		bool operator>=(const random_access_iterator& it) const {return (current >= it.current);};
 
 
 

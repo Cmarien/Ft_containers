@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rev_random_access_iterator.hpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 10:59:08 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/14 17:19:01 by user42           ###   ########.fr       */
+/*   Updated: 2022/03/23 10:46:28 by cmarien          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ namespace ft{
 		rev_random_access_iterator(const rev_random_access_iterator& x) : current(x.current)
 		{ }
 
-		bool operator!=(const rev_random_access_iterator& it) const {return (it.current != current);};
-		bool operator==(const rev_random_access_iterator& it) const {return (it.current == current);};
-		bool operator>(const rev_random_access_iterator& it) const {return (it.current > current);};
-		bool operator<(const rev_random_access_iterator& it) const {return (it.current < current);};
-		bool operator<=(const rev_random_access_iterator& it) const {return (it.current <= current);};
-		bool operator>=(const rev_random_access_iterator& it) const {return (it.current >= current);};
+		bool operator!=(const rev_random_access_iterator& it) const {return (current != it.current);};
+		bool operator==(const rev_random_access_iterator& it) const {return (current == it.current);};
+		bool operator>(const rev_random_access_iterator& it) const {return (current > it.current);};
+		bool operator<(const rev_random_access_iterator& it) const {return (current < it.current);};
+		bool operator<=(const rev_random_access_iterator& it) const {return (current <= it.current);};
+		bool operator>=(const rev_random_access_iterator& it) const {return (current >= it.current);};
 
 		reference operator*() const{
 			return *current;
