@@ -12,7 +12,7 @@ INCLUDES	=	-I./includes/
 
 NAME		=	containers
 
-CFLAGS      =   -Wall -Werror -Wextra -std=c++98
+CFLAGS      =   -Wall -Werror -Wextra
 
 CC			=	c++
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rev_random_access_iterator.hpp                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarien <cmarien@student.42.fr>            +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 10:59:08 by cmarien           #+#    #+#             */
-/*   Updated: 2022/03/23 10:46:28 by cmarien          ###   ########.fr       */
+/*   Updated: 2022/03/31 18:39:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,110 +16,147 @@
 #include "random_access_iterator.hpp"
 
 namespace ft{
-	template<typename T>
-	class rev_random_access_iterator : ft::iterator<ft::random_access_iterator_tag, T>
+	template<typename T, int B>
+	class rev_random_access_iterator : public random_access_iterator<T, B>
 	{
-	private:
 	public:
 			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type			value_type;
-			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type		difference_type;
-			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::difference_type	difference_type;
+		    typedef typename ft::iterator<ft::random_access_iterator_tag, T>::reference			reference;
 			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::pointer				pointer;
-			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::iterator_category	iterator_category;
+            typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type const &			const_reference;
+			typedef typename ft::iterator<ft::random_access_iterator_tag, T>::value_type const *				const_pointer;
 	protected:
-		pointer current;
 	public:
 		
-		rev_random_access_iterator() : current(pointer()) {}
-
-		rev_random_access_iterator(pointer p) : current(p) {
+		rev_random_access_iterator() {
+			this->current = pointer();
 		}
 
-		rev_random_access_iterator(const rev_random_access_iterator& x) : current(x.current)
-		{ }
-
-		bool operator!=(const rev_random_access_iterator& it) const {return (current != it.current);};
-		bool operator==(const rev_random_access_iterator& it) const {return (current == it.current);};
-		bool operator>(const rev_random_access_iterator& it) const {return (current > it.current);};
-		bool operator<(const rev_random_access_iterator& it) const {return (current < it.current);};
-		bool operator<=(const rev_random_access_iterator& it) const {return (current <= it.current);};
-		bool operator>=(const rev_random_access_iterator& it) const {return (current >= it.current);};
-
-		reference operator*() const{
-			return *current;
+		rev_random_access_iterator(pointer p) {
+			this->current = p;
 		}
 
-		pointer	operator->() const{
-			return current;
+		rev_random_access_iterator(const random_access_iterator<T, 0>& y){
+			this->current = (y.getCurrent() - 1);
+		}
+
+		rev_random_access_iterator(const random_access_iterator<T, 2>& y){
+			this->current = y.getCurrent();
+		}
+
+		pointer getCurrent() const{
+			return (this->current);
+		}
+		// template<typename U>
+		// rev_random_access_iterator(const rev_random_access_iterator<U>& other) : t(other.getT()){
+		// 	this->current = const_cast<value_type*>(other.getCurrent());
+		// }
+
+		// value_type getT() const {return value_type();}
+
+		// operator rev_random_access_iterator<const value_type>() const {return rev_random_access_iterator<const value_type>(this->current);}
+
+
+		bool operator!=(const random_access_iterator<T, 0>& it) const {return (this->current != it.getCurrent());};
+		bool operator==(const random_access_iterator<T, 0>& it) const {return (this->current == it.getCurrent());};
+		bool operator>(const random_access_iterator<T, 0>& it) const {return (this->current < it.getCurrent());};
+		bool operator<(const random_access_iterator<T, 0>& it) const {return (this->current > it.getCurrent());};
+		bool operator<=(const random_access_iterator<T, 0>& it) const {return (this->current >= it.getCurrent());};
+		bool operator>=(const random_access_iterator<T, 0>& it) const {return (this->current <= it.getCurrent());};
+
+		bool operator!=(const random_access_iterator<T, 2>& it) const {return (this->current != it.getCurrent());};
+		bool operator==(const random_access_iterator<T, 2>& it) const {return (this->current == it.getCurrent());};
+		bool operator>(const random_access_iterator<T, 2>& it) const {return (this->current < it.getCurrent());};
+		bool operator<(const random_access_iterator<T, 2>& it) const {return (this->current > it.getCurrent());};
+		bool operator<=(const random_access_iterator<T, 2>& it) const {return (this->current >= it.getCurrent());};
+		bool operator>=(const random_access_iterator<T, 2>& it) const {return (this->current <= it.getCurrent());};
+
+		bool operator!=(const random_access_iterator<T, 3>& it) const {return (this->current != it.getCurrent());};
+		bool operator==(const random_access_iterator<T, 3>& it) const {return (this->current == it.getCurrent());};
+		bool operator>(const random_access_iterator<T, 3>& it) const {return (this->current < it.getCurrent());};
+		bool operator<(const random_access_iterator<T, 3>& it) const {return (this->current > it.getCurrent());};
+		bool operator<=(const random_access_iterator<T, 3>& it) const {return (this->current >= it.getCurrent());};
+		bool operator>=(const random_access_iterator<T, 3>& it) const {return (this->current <= it.getCurrent());};
+
+		random_access_iterator<T, 0> base(){
+			return (this->current + 1);
+		}
+		
+		reference operator*(){
+			return *this->current;
+		}
+
+		pointer	operator->(){
+			return this->current;
 		}
 
 		rev_random_access_iterator	&operator=(const rev_random_access_iterator &rhs) {
-			if (this != &rhs)
-				current = rhs.current;
+			this->current = rhs.current;
 			return *this;
 		}
 
-		rev_random_access_iterator operator++(){
-			return --current;
+		rev_random_access_iterator &operator++(){
+			--this->current;
+			return *this;
 		}
 
 		rev_random_access_iterator operator++(int){
-			pointer tmp = current--;
+			rev_random_access_iterator tmp(*this);
+			operator++();
 			return tmp;
 		}
 
-		rev_random_access_iterator operator--(){
-			return ++current;
+		rev_random_access_iterator &operator--(){
+			++this->current;
+			return *this;
 		}
 
 		rev_random_access_iterator operator--(int){
-			pointer tmp = current++;
+			rev_random_access_iterator tmp(*this);
+			operator--();
 			return tmp;
 		}
 
-		difference_type operator-(rev_random_access_iterator &sub){
-			difference_type i = 0;
-			pointer tmp = current;
-			while(tmp != sub.current)
-			{
-				i++;
-				tmp--;
-			}
-			return i;
+		difference_type operator-(const rev_random_access_iterator &sub){
+			return (-(this->current - sub.current));
 		}
 
 		rev_random_access_iterator	operator-(difference_type n){
-			pointer tmp = current;
-			for (difference_type i = 0; i < n; i++){
+			pointer tmp = this->current;
+			for (difference_type i = 0; i < n; i++)
 				tmp++;
-			}
 			return tmp;
 		}
 
-		rev_random_access_iterator	operator+(difference_type n){
-			pointer tmp = current;
-			for (difference_type i = 0; i < n; i++){
+		rev_random_access_iterator	operator+(int n){
+			pointer tmp = this->current;
+			for (difference_type i = 0; i < n; i++)
 				tmp--;
-			}
 			return tmp;
 		}
 
-		rev_random_access_iterator	operator+=(difference_type n){
+		rev_random_access_iterator	&operator+=(difference_type n){
 			for (difference_type i = 0; i < n; i++){
-				current--;
+				this->current--;
 			}
-			return current;
+			return *this;
 		}
 
-		rev_random_access_iterator	operator-=(difference_type n){
+		rev_random_access_iterator	&operator-=(difference_type n){
 			for (difference_type i = 0; i < n; i++){
-				current++;
+				this->current++;
 			}
-			return current;
+			return *this;
 		}
 
 		reference	operator[](int n){
-			return *(current - n);
+			return *(this->current - n);
+		}
+		friend rev_random_access_iterator operator+(int lhs, rev_random_access_iterator rhs){
+			rev_random_access_iterator tmp(rhs);
+			tmp += lhs;
+			return tmp;
 		}
 	};
 }
